@@ -1,5 +1,5 @@
 # Shop2DoorDelivers
-Home delivery service for grocery chain stores
+Home delivery service for grocery chain stores.
 Stack:
 1. Java 8-17
 2. Spring Boot
