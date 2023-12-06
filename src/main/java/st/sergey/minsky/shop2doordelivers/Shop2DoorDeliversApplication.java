@@ -6,8 +6,8 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 @SpringBootApplication
 public class Shop2DoorDeliversApplication {
 
-	public static void main(String[] args) {
-		SpringApplication.run(Shop2DoorDeliversApplication.class, args);
-	}
+    public static void main(String[] args) {
+        SpringApplication.run(Shop2DoorDeliversApplication.class, args);
+    }
 
 }
