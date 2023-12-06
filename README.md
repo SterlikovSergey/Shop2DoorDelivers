@@ -1,6 +1,7 @@
 # Shop2DoorDelivers
 Home delivery service for grocery chain stores.
-Stack:
+
+Project stack:
 1. Java 8-17
 2. Spring Boot
 3. Spring Data JPA (ORM)
