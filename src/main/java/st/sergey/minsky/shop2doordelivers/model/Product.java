@@ -1,16 +1,17 @@
 package st.sergey.minsky.shop2doordelivers.model;
 
-import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
-@Data
-@Builder
+import javax.persistence.*;
+import java.math.BigDecimal;
+
 @Entity
-@NoArgsConstructor
+@Builder
 @AllArgsConstructor
+@NoArgsConstructor
+@Data
+@Getter
+@Setter
 public class Product {
 
     @Id
@@ -19,9 +20,18 @@ public class Product {
 
     private String name;
     private Short amount;
+    private BigDecimal price;
 
     @ManyToOne
     @JoinColumn(name = "category_id")
     private Category category;
+
+    @ManyToOne
+    @JoinColumn(name = "store_id")
+    private Store store;
+
+    @ManyToOne
+    @JoinColumn(name = "order_id")
+    private Order order;
 
 }

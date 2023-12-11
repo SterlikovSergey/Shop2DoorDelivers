@@ -1,12 +1,8 @@
 package st.sergey.minsky.shop2doordelivers.model;
 
-
 import lombok.*;
 
 import javax.persistence.*;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
 
 @Entity
 @Builder
@@ -15,13 +11,17 @@ import javax.persistence.GenerationType;
 @Data
 @Getter
 @Setter
-public class Category {
-
+public class Image {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String name;
+    @Lob
+    private byte[] imageBytes;
 
+    private Long userId;
 
+    private Long productId;
+
+    private Long courierId;
 }

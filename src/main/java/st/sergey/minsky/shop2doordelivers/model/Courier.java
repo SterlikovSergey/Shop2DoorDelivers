@@ -1,12 +1,10 @@
 package st.sergey.minsky.shop2doordelivers.model;
 
-
 import lombok.*;
 
 import javax.persistence.*;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Builder
@@ -15,7 +13,7 @@ import javax.persistence.GenerationType;
 @Data
 @Getter
 @Setter
-public class Category {
+public class Courier {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -23,5 +21,10 @@ public class Category {
 
     private String name;
 
+    @OneToMany
+    private List<Order> orders = new ArrayList<>();
+
+    @OneToMany
+    List<Comment> comments = new ArrayList<>();
 
 }

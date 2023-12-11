@@ -1,12 +1,10 @@
 package st.sergey.minsky.shop2doordelivers.model;
 
-
 import lombok.*;
+import st.sergey.minsky.shop2doordelivers.model.enums.PaymentStatus;
 
 import javax.persistence.*;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
+import java.math.BigDecimal;
 
 @Entity
 @Builder
@@ -15,13 +13,15 @@ import javax.persistence.GenerationType;
 @Data
 @Getter
 @Setter
-public class Category {
-
+public class Payment {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String name;
+    private BigDecimal amount;
+    private PaymentStatus status;
 
+    @OneToOne
+    private Order order;
 
 }
