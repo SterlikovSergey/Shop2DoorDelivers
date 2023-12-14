@@ -1,6 +1,13 @@
 package st.sergey.minsky.shop2doordelivers.model.enums;
 
-public enum UserRole {
+import org.springframework.security.core.GrantedAuthority;
+
+public enum UserRole implements GrantedAuthority {
     USER,
-    ADMIN
+    ADMIN;
+
+    @Override
+    public String getAuthority() {
+        return this.name();
+    }
 }
