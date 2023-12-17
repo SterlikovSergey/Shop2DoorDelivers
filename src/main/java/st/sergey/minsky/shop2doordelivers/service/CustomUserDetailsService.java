@@ -1,6 +1,7 @@
 package st.sergey.minsky.shop2doordelivers.service;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -14,19 +15,25 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
-@RequiredArgsConstructor
 public class CustomUserDetailsService implements UserDetailsService {
-
+    @Autowired
     private final UserRepository userRepository;
+
+    public CustomUserDetailsService(UserRepository userRepository) {
+        this.userRepository = userRepository;
+    }
+
     @Override
     public UserDetails loadUserByUsername(String username) {
         User user = userRepository.findUserByEmail(username)
-                .orElseThrow(() -> new UsernameNotFoundException("UsernameEmail not found wish username " + username));
+                .orElseThrow(() -> new UsernameNotFoundException("Username or Email not found wish username " + username));
         return build(user);
     }
 
-    public User findUserById(Long id){
-        return userRepository.findUserById(id).orElse(null);
+    public UserDetails findUserById(Long id){
+        User user = userRepository.findUserById(id)
+                .orElseThrow(() -> new UsernameNotFoundException("User  not found wish userId " + id));
+        return build(user);
     }
 
     public static User build(User user){
@@ -36,7 +43,7 @@ public class CustomUserDetailsService implements UserDetailsService {
                 .collect(Collectors.toList());
         return new User(
                 user.getId(),
-                user.getName(),
+                user.getUsername(),
                 user.getEmail(),
                 user.getPassword(),
                 authorities);

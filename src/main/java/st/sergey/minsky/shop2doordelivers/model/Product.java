@@ -4,6 +4,8 @@ import lombok.*;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Builder
@@ -26,9 +28,12 @@ public class Product {
     @JoinColumn(name = "category_id")
     private Category category;
 
-    @ManyToOne
+/*    @ManyToOne
     @JoinColumn(name = "store_id")
-    private Store store;
+    private Store store;*/
+
+    @ManyToMany(mappedBy = "products")
+    private List<Store> stores = new ArrayList<>();
 
     @ManyToOne
     @JoinColumn(name = "order_id")

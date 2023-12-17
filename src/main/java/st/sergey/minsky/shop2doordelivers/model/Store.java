@@ -21,7 +21,15 @@ public class Store {
     private Long id;
     private String name;
 
-    @OneToMany
-    List<Product> products = new ArrayList<>();
+    @ManyToMany
+    @JoinTable(
+            name = "store_product",
+            joinColumns = @JoinColumn(name = "store_id"),
+            inverseJoinColumns = @JoinColumn(name = "product_id")
+    )
+    private List<Product> products = new ArrayList<>();
+
+/*    @OneToMany
+    List<Product> products = new ArrayList<>();*/
 
 }

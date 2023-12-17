@@ -1,6 +1,8 @@
 package st.sergey.minsky.shop2doordelivers.service;
 
 import lombok.RequiredArgsConstructor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import st.sergey.minsky.shop2doordelivers.model.Product;
 import st.sergey.minsky.shop2doordelivers.repository.ProductRepository;
@@ -11,10 +13,13 @@ import java.util.List;
 @RequiredArgsConstructor
 public class ProductService {
 
+    public static final Logger LOG = LoggerFactory.getLogger(ProductService.class);
+
     private final ProductRepository productRepository;
 
 
     public Product create(Product product) {
+        LOG.info("Saving product " + product.getName());
         return productRepository.save(product);
     }
 
