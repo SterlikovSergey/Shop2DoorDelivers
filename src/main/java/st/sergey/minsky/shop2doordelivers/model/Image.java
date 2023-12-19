@@ -19,6 +19,8 @@ public class Image {
     @Lob
     private byte[] imageBytes;
 
+    private String name;
+
     private Long userId;
 
     private Long productId;

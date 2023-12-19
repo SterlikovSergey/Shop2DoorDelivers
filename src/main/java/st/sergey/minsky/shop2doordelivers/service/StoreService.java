@@ -1,15 +1,15 @@
 package st.sergey.minsky.shop2doordelivers.service;
 
 import lombok.RequiredArgsConstructor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
-import st.sergey.minsky.shop2doordelivers.exceptions.ProductNotFoundException;
-import st.sergey.minsky.shop2doordelivers.exceptions.StoreNotFoundException;
+import st.sergey.minsky.shop2doordelivers.exception.StoreNotFoundException;
 import st.sergey.minsky.shop2doordelivers.model.Product;
 import st.sergey.minsky.shop2doordelivers.model.Store;
 import st.sergey.minsky.shop2doordelivers.repository.ProductRepository;
 import st.sergey.minsky.shop2doordelivers.repository.StoreRepository;
 
-import java.util.ArrayList;
 import java.util.List;
 
 
@@ -20,17 +20,10 @@ public class StoreService {
     private final StoreRepository storeRepository;
     private final ProductRepository productRepository;
 
-    public Store addProductToStore(Long storeId, Long productId) {
-        Store store = storeRepository.findById(storeId)
-                .orElseThrow(() -> new StoreNotFoundException("Store not found with ID: " + storeId));
-        List<Product> products = new ArrayList<>();
+    public static final Logger LOG = LoggerFactory.getLogger(StoreService.class);
 
-        Product product = productRepository.findById(productId)
-                .orElseThrow(() -> new ProductNotFoundException("Product not found with ID: " + productId));
-        products.add(product);
-        store.setProducts(products);
-        return storeRepository.save(store);
-    }
+
+
 
 
     public Store createOrUpdateStore(Store store) {
@@ -48,4 +41,6 @@ public class StoreService {
     public void deleteStoreById(Long id) {
         storeRepository.deleteById(id);
     }
+
+
 }

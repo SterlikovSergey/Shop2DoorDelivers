@@ -5,14 +5,15 @@ import lombok.Setter;
 import lombok.ToString;
 
 import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotEmpty;
 
 @Getter
 @Setter
 @ToString
-public class CategoryDto {
+public class AuthRequestDto {
 
-    @NotBlank(message = "Please enter category name")
-    private String name;
+    @NotBlank(message = "Please enter username")
+    private String username;
 
+    @NotBlank(message = "Please enter password")
+    private String password;
 }

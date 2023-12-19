@@ -1,7 +1,7 @@
 package st.sergey.minsky.shop2doordelivers.validations;
 
 import st.sergey.minsky.shop2doordelivers.annotations.PasswordMatchers;
-import st.sergey.minsky.shop2doordelivers.payload.request.SignupRequest;
+import st.sergey.minsky.shop2doordelivers.dto.UserDto;
 
 import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;
@@ -10,7 +10,7 @@ public class PasswordMatchersValidator implements ConstraintValidator<PasswordMa
 
     @Override
     public boolean isValid(Object obj, ConstraintValidatorContext constraintValidatorContext) {
-        if (obj instanceof SignupRequest userSignupRequest) {
+        if (obj instanceof UserDto userSignupRequest) {
             String password = userSignupRequest.getPassword();
             String confirmPassword = userSignupRequest.getConfirmPassword();
 

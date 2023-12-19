@@ -1,67 +1,78 @@
 package st.sergey.minsky.shop2doordelivers.service;
 
+import lombok.AllArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
-import st.sergey.minsky.shop2doordelivers.dto.UserDto;
-import st.sergey.minsky.shop2doordelivers.exceptions.UserExistException;
+import st.sergey.minsky.shop2doordelivers.exception.UserExistException;
+import st.sergey.minsky.shop2doordelivers.exception.UserNotFoundException;
 import st.sergey.minsky.shop2doordelivers.model.User;
-import st.sergey.minsky.shop2doordelivers.model.enums.UserRole;
-import st.sergey.minsky.shop2doordelivers.payload.request.SignupRequest;
+import st.sergey.minsky.shop2doordelivers.model.enums.Role;
 import st.sergey.minsky.shop2doordelivers.repository.UserRepository;
 
 import java.security.Principal;
-
+import java.time.LocalDateTime;
+import java.util.List;
+import java.util.Optional;
+import java.util.Set;
+@AllArgsConstructor
 @Service
-public class UserService {
+public class UserService implements UserDetailsService {
     public static final Logger LOG = LoggerFactory.getLogger(UserService.class);
 
-    @Autowired
     private final UserRepository userRepository;
-    @Autowired
-    private final BCryptPasswordEncoder bCryptPasswordEncoder;
 
-    public UserService(UserRepository userRepository, BCryptPasswordEncoder bCryptPasswordEncoder) {
-        this.userRepository = userRepository;
-        this.bCryptPasswordEncoder = bCryptPasswordEncoder;
-    }
+    public Object create(User user) {
+        LocalDateTime currentDateTime = LocalDateTime.now();
+        user.setCreatedDate(currentDateTime);
+        user.setRoles(Set.of(Role.USER));
+        user.setPassword(new BCryptPasswordEncoder().encode(user.getPassword()));
 
-    public User createUser(SignupRequest userIn){
-        User user = new User();
-        user.setEmail(userIn.getEmail());
-        user.setName(userIn.getFirstname());
-        user.setLastname(userIn.getLastname());
-        user.setUsername(userIn.getUsername());
-        user.setPassword(bCryptPasswordEncoder.encode(userIn.getPassword()));
-        user.getRole().add(UserRole.USER);
         try {
-            LOG.info("Saving User " + userIn.getEmail());
+            LOG.info("Saving User {}", user.getEmail());
             return userRepository.save(user);
         } catch (Exception e) {
-            LOG.error("Error during registration. {} ", e.getMessage());
-            throw new UserExistException(" The User " + user.getEmail() + " already exist. Please check credentials");
+            LOG.error("Error during registration. {}", e.getMessage());
+            throw new UserExistException("The user " + user.getUsername() + " already exist. Please check credentials");
         }
     }
 
+    @Override
+    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+        Optional<User> byUsername = userRepository.findByUsername(username);
+        return byUsername.orElseThrow(UserNotFoundException::new);
+    }
 
-    public User updateUser(UserDto userDto, Principal principal){
-        User user = getUserByPrincipal(principal);
-        user.setName(userDto.getFirstname());
-        user.setLastname(userDto.getLastname());
+    private User getUserByPrincipal(Principal principal) {
+        String username = principal.getName();
+        return userRepository.findByUsername(username)
+                .orElseThrow(() -> new UsernameNotFoundException("Username not found with username " + username));
+    }
+
+    public Optional<User> findById(Long id) {
+        return userRepository.findById(id);
+    }
+
+    public User updateUser(User user){
         return userRepository.save(user);
     }
 
-    public User getCurrentUser(Principal principal){
-        return getUserByPrincipal(principal);
+
+    public Page<User> getAllUsers(Pageable pageable) {
+        return userRepository.findAllBy(pageable);
+    }
+
+    public User getUserByName(String name) {
+        Optional<User> byName = userRepository.findByUsername(name);
+        return byName.orElseThrow(UserNotFoundException::new);
     }
 
 
-    private User getUserByPrincipal(Principal principal){
-        String username = principal.getName();
-        return userRepository.findUserByUsername(username)
-                .orElseThrow(()-> new UsernameNotFoundException("Username not found with username " + username));
-    }
+
 }

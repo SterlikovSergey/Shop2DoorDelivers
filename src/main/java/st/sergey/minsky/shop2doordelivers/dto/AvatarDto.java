@@ -3,11 +3,11 @@ package st.sergey.minsky.shop2doordelivers.dto;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
-import st.sergey.minsky.shop2doordelivers.model.Product;
+import org.springframework.web.multipart.MultipartFile;
 
 @Getter
 @Setter
 @ToString
-public class OrderDto {
-    private Product product;
+public class AvatarDto {
+    private MultipartFile avatar;
 }

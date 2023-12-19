@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import st.sergey.minsky.shop2doordelivers.model.Category;
 import st.sergey.minsky.shop2doordelivers.repository.CategoryRepository;
+import st.sergey.minsky.shop2doordelivers.repository.viev.CategoryView;
 
 import java.util.List;
 
@@ -17,9 +18,11 @@ public class CategoryService {
         return categoryRepository.save(category);
     }
 
-    public List<Category> readAll(){
-        return categoryRepository.findAll();
+    public List<CategoryView> readAll(){
+        return categoryRepository.findAllByOrderByNameAsc();
     }
+
+
 
     public Category readById(Long id){
         return categoryRepository.findById(id).orElseThrow(() ->

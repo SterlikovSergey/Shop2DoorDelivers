@@ -5,7 +5,7 @@ import org.springframework.format.annotation.DateTimeFormat;
 import st.sergey.minsky.shop2doordelivers.model.enums.OrderStatus;
 
 import javax.persistence.*;
-
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.ArrayList;
@@ -44,4 +44,12 @@ public class Order {
 
     @ManyToOne
     private User user;
+
+    private BigDecimal totalCost;
+
+
+
+    public String getUserName() {
+        return this.user != null ? this.user.getUsername() : null;
+    }
 }

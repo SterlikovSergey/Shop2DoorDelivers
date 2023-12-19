@@ -7,6 +7,7 @@ import st.sergey.minsky.shop2doordelivers.model.Courier;
 
 import java.util.List;
 
+
 @Repository
 public interface CommentRepository extends JpaRepository<Comment, Long> {
     List<Comment> findAllByCourierOrderByCreatedDateDesc(Courier courier);
