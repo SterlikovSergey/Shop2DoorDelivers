@@ -4,7 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import st.sergey.minsky.shop2doordelivers.model.Category;
 import st.sergey.minsky.shop2doordelivers.repository.CategoryRepository;
-import st.sergey.minsky.shop2doordelivers.repository.viev.CategoryView;
+import st.sergey.minsky.shop2doordelivers.repository.view.CategoryView;
 
 import java.util.List;
 

@@ -35,10 +35,6 @@ public class ProductService {
         return productRepository.save(seveProduct);
     }
 
-
-
-
-
     public List<Product> readAll() {
         return productRepository.findAll();
     }

@@ -22,7 +22,6 @@ public class ResponseErrorValidator {
                     errorMap.put(error.getCode(), error.getDefaultMessage());
                 }
             }
-
             for (FieldError error : result.getFieldErrors()) {
                 errorMap.put(error.getField(), error.getDefaultMessage());
             }
@@ -30,6 +29,5 @@ public class ResponseErrorValidator {
         }
         return null;
     }
-
 }
 

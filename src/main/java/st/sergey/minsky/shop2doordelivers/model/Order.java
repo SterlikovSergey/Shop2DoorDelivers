@@ -10,6 +10,7 @@ import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Entity
 @Table(name = "orders")
@@ -49,7 +50,21 @@ public class Order {
 
 
 
-    public String getUserName() {
+    public String getUsername() {
         return this.user != null ? this.user.getUsername() : null;
     }
+
+    public List<Product> getProducts() {
+        return this.products != null ? new ArrayList<>(this.products) : null;
+    }
+
+    public String getDate() {
+        return this.createdOrder != null ? this.createdOrder.toString() : null;
+    }
+
+    public String getOrderStatus() {
+        return this.orderStatus != null ? this.orderStatus.name() : null;
+    }
+
+
 }

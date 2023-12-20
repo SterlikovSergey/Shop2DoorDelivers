@@ -21,23 +21,15 @@ public class StoreService {
     private final ProductRepository productRepository;
 
     public static final Logger LOG = LoggerFactory.getLogger(StoreService.class);
-
-
-
-
-
     public Store createOrUpdateStore(Store store) {
         return storeRepository.save(store);
     }
-
     public Store getStoreById(Long id) {
         return storeRepository.findById(id).orElse(null);
     }
-
     public List<Store> getAllStores() {
         return storeRepository.findAll();
     }
-
     public void deleteStoreById(Long id) {
         storeRepository.deleteById(id);
     }

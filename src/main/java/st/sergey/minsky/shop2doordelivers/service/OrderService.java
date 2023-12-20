@@ -10,12 +10,11 @@ import st.sergey.minsky.shop2doordelivers.model.Product;
 import st.sergey.minsky.shop2doordelivers.model.User;
 import st.sergey.minsky.shop2doordelivers.model.enums.OrderStatus;
 import st.sergey.minsky.shop2doordelivers.repository.OrderRepository;
-import st.sergey.minsky.shop2doordelivers.repository.viev.OrderView;
+import st.sergey.minsky.shop2doordelivers.repository.view.OrderView;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -34,7 +33,6 @@ public class OrderService {
                 .orderStatus(OrderStatus.CREATED)
                 .user(user)
                 .build();
-
         return orderRepository.save(newOrder);
     }
 
@@ -42,26 +40,15 @@ public class OrderService {
         Order order = orderRepository.findById(orderId)
                 .orElseThrow(()-> new OrderNotFoundException("Order not found"));
         Product balanceProduct =  productService.getProduct(product.getId());
-
         Short amountBalanceProduct = balanceProduct.getAmount();
         Short amountOrderProduct = product.getAmount();
-
         balanceProduct.setAmount((short) (amountBalanceProduct - amountOrderProduct));
         productService.update(balanceProduct);
-
-
         List<Product> existsProducts = order.getProducts();
         existsProducts.add(product);
         order.setProducts(existsProducts);
-
-/*        BigDecimal totalCost = calculateTotalCost(existsProducts); // Подсчитываем общую стоимость товаров
-        int totalItems = existsProducts.size(); // Получаем общее количество товаров
-
-        order.setTotalCost(totalCost);
-        order.setTotalCost(BigDecimal.valueOf(totalItems));*/
-
+        order.setOrderStatus(OrderStatus.PROCESSING);
         return orderRepository.save(order);
-
     }
 
     private BigDecimal calculateTotalCost(List<Product> products) {
@@ -86,9 +73,15 @@ public class OrderService {
         return orderRepository.findById(id).orElse(null);
     }
 
-    public List<OrderView> getAllOrdersByStatus(OrderStatus status) {
+    public List<Order> getAllOrdersByStatus(OrderStatus status) {
         return orderRepository.findAllByOrderStatusOrderByCreatedOrderDesc(status);
     }
+
+    public List<OrderView> getAllByProcessing(OrderStatus status){
+        return orderRepository.findAllByOrderStatus(status);
+    }
+
+
 
     public void deleteOrderById(Long id) {
         orderRepository.deleteById(id);

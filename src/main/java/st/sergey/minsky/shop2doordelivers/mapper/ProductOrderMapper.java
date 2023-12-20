@@ -11,7 +11,8 @@ import st.sergey.minsky.shop2doordelivers.service.ProductService;
 public class ProductOrderMapper {
     private final ProductService productService;
     public Product productOrderDtoToProduct(ProductOrderDto dto){
-        Product product = productService.getProduct(dto.getId());
+        Product product = new Product();
+        product.setId(dto.getId());
         product.setAmount(dto.getAmount());
         return product;
     }

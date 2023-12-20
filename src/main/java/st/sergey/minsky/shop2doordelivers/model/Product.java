@@ -42,4 +42,9 @@ public class Product {
     @JoinColumn(name = "order_id")
     private Order order;*/
 
+    public String getCategoryName(){
+        return this.category != null ? this.category.getName() : null;
+    }
+
+
 }

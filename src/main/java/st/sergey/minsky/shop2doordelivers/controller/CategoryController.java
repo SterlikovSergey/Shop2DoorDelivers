@@ -8,7 +8,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import st.sergey.minsky.shop2doordelivers.dto.CategoryDto;
 import st.sergey.minsky.shop2doordelivers.mapper.CategoryMapper;
-import st.sergey.minsky.shop2doordelivers.repository.viev.CategoryView;
+import st.sergey.minsky.shop2doordelivers.repository.view.CategoryView;
 import st.sergey.minsky.shop2doordelivers.service.CategoryService;
 import st.sergey.minsky.shop2doordelivers.validations.ResponseErrorValidator;
 

@@ -1,4 +1,4 @@
-package st.sergey.minsky.shop2doordelivers.repository.viev;
+package st.sergey.minsky.shop2doordelivers.repository.view;
 
 import java.time.LocalDateTime;
 

@@ -1,4 +1,4 @@
-package st.sergey.minsky.shop2doordelivers.repository.viev;
+package st.sergey.minsky.shop2doordelivers.repository.view;
 
 
 import st.sergey.minsky.shop2doordelivers.model.Product;
@@ -8,11 +8,13 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 public interface OrderView {
-
-    LocalDateTime getCreatedOrder();
-    OrderStatus getOrderStatus();
-    List<Product> getProducts();
     String getUsername();
+
+    List<Product> getProducts();
+
+    String getDate();
+    String getOrderStatus();
+
 
 
 }
