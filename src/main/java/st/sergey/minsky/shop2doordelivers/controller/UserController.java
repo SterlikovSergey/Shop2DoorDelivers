@@ -18,6 +18,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.util.ObjectUtils;
 import org.springframework.validation.BindingResult;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import st.sergey.minsky.shop2doordelivers.configuration.JWTTokenProvider;
 import st.sergey.minsky.shop2doordelivers.dto.AuthRequestDto;
@@ -26,6 +27,7 @@ import st.sergey.minsky.shop2doordelivers.exception.UserExistException;
 import st.sergey.minsky.shop2doordelivers.mapper.UserMapper;
 import st.sergey.minsky.shop2doordelivers.model.User;
 import st.sergey.minsky.shop2doordelivers.payload.response.JWTTokenSuccessResponse;
+import st.sergey.minsky.shop2doordelivers.payload.response.MessageResponse;
 import st.sergey.minsky.shop2doordelivers.service.UserService;
 import st.sergey.minsky.shop2doordelivers.validations.ResponseErrorValidator;
 
@@ -35,6 +37,7 @@ import java.util.Optional;
 
 @RequiredArgsConstructor
 @RestController
+@Validated
 @RequestMapping("/user")
 @Tag(name = "User resource", description = "description from user resource")
 public class UserController {
@@ -56,7 +59,7 @@ public class UserController {
     @GetMapping("/{name}")
     @Operation(summary = "find by name", description = "Find User by name")
     @ApiResponse(responseCode = "404", description = "User not found")
-    public ResponseEntity<User> getCandidateByName(@PathVariable String name) {
+    public ResponseEntity<User> getUserByName(@PathVariable String name) {
         User byName = userService.getUserByName(name);
         return ResponseEntity.ok(byName);
     }
@@ -75,19 +78,33 @@ public class UserController {
         if(!ObjectUtils.isEmpty(errors)) {
             return errors;
         }
-        return new ResponseEntity<>(userService.create(userMapper.createUserDtoToUser(dto)), HttpStatus.CREATED);
+        return new ResponseEntity<>(userService.create(userMapper.createUserDtoToUser(dto)),
+                HttpStatus.CREATED);
     }
 
     @PostMapping("/login")
-    public ResponseEntity<String> login(@RequestBody AuthRequestDto dto) {
+    public ResponseEntity<Object> login(@Valid @RequestBody AuthRequestDto dto,
+                                        BindingResult result) {
+        ResponseEntity<Object> errors = responseErrorValidator.mapValidationService(result);
+        if(ObjectUtils.isEmpty(errors)){
+            return errors;
+        }
+
         UserDetails userDetails = userService.loadUserByUsername(dto.getUsername());
         BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
+
         if (encoder.matches(dto.getPassword(), userDetails.getPassword())) {
             String token = tokenProvider.generateToken(userDetails.getUsername(), userDetails.getAuthorities());
             return ResponseEntity.ok(token);
         }
         return ResponseEntity.badRequest().build();
     }
+
+/*    @PostMapping("/delete/{id}")
+    public ResponseEntity<MessageResponse> setUserStatusDelete(@PathVariable ("id") Long id){
+        userService.setDeleteStatusById(id);
+        return ResponseEntity.ok(new MessageResponse("User " + id + "deleting"));
+    }*/
 
 
 

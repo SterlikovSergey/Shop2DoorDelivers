@@ -16,7 +16,6 @@ import java.security.Principal;
 @RestController
 @RequestMapping("/image")
 @CrossOrigin
-
 public class ImageUploadController {
     @Autowired
     private ImageUploadService imageUploadService;

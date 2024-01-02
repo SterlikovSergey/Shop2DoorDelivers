@@ -1,9 +1,6 @@
 package st.sergey.minsky.shop2doordelivers.model.enums;
 
-public enum OrderStatus {
+public enum StoreStatus {
     CREATED,
-    PROCESSING,
-    DELIVERED,
-    CANCELLED
-
+    DELETED
 }

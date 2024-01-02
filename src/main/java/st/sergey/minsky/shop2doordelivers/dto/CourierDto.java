@@ -5,13 +5,12 @@ import lombok.Setter;
 import lombok.ToString;
 
 import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotEmpty;
 
 @Getter
 @Setter
 @ToString
-public class StoreDto {
-    
-    @NotBlank(message = "Please enter store name")
+public class CourierDto {
+
+    @NotBlank(message = "Please enter courier name")
     private String name;
 }

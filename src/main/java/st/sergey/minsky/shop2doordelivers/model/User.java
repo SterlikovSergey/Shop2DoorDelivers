@@ -8,6 +8,7 @@ import lombok.Setter;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import st.sergey.minsky.shop2doordelivers.model.enums.Role;
+import st.sergey.minsky.shop2doordelivers.model.enums.UserStatus;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
@@ -36,6 +37,9 @@ public class User implements UserDetails {
     @Enumerated(EnumType.STRING)
     @ElementCollection(fetch = FetchType.EAGER)
     private Set<Role> roles;
+
+    @Enumerated(EnumType.STRING)
+    private UserStatus status;
 
     @JsonFormat(pattern = "yyyy-mm-dd HH:mm:ss")
     @Column(updatable = false)

@@ -18,6 +18,7 @@ import java.util.List;
 @RequiredArgsConstructor
 @RequestMapping("/order")
 public class OrderController {
+
     private final OrderService orderService;
     private final ProductOrderMapper productOrderMapper;
 
@@ -27,20 +28,22 @@ public class OrderController {
         return ResponseEntity.ok(order);
     }
 
+/*
     @GetMapping("/all/create")
     public ResponseEntity<List<Order>> getAllOrdersByStatusCreate() {
         List<Order> orders = orderService.getAllOrdersByStatus(OrderStatus.CREATED);
         return ResponseEntity.ok(orders);
     }
+*/
 
-    @GetMapping("/all/processing")
+/*    @GetMapping("/all/processing")
     public ResponseEntity<List<OrderView>> getAllOrdersByStatusProcessing() {
         List<OrderView> orders = orderService.getAllByProcessing(OrderStatus.PROCESSING);
         return ResponseEntity.ok(orders);
-    }
+    }*/
 
     @PostMapping("/{id}")
-    public ResponseEntity<Order> createOrder(@PathVariable ("id") Long userId) {
+    public ResponseEntity<Order> create(@PathVariable ("id") Long userId) {
         Order savedOrder = orderService.createOrder(userId);
         return ResponseEntity.ok(savedOrder);
     }
@@ -49,7 +52,14 @@ public class OrderController {
     public ResponseEntity<Order> addProduct(@PathVariable ("orderId") Long orderId,
                                             @RequestBody ProductOrderDto dto){
         Product sevedProduct = productOrderMapper.productOrderDtoToProduct(dto);
-        return new ResponseEntity<>(orderService.addProductToOrder(orderId,sevedProduct), HttpStatus.CREATED);
+        return new ResponseEntity<>(orderService.addProductToExistingOrder(orderId,sevedProduct), HttpStatus.CREATED);
+    }
+
+    @PostMapping("{orderId}/add-courier/{courierId}")
+    public ResponseEntity<Order> addCourier(@PathVariable ("orderId") Long orderId,
+                                                @PathVariable ("courierId") Long courierId){
+        Order order = orderService.assignCourierToOrder(orderId,courierId);
+        return ResponseEntity.ok(order);
     }
 
     @DeleteMapping("/{id}")

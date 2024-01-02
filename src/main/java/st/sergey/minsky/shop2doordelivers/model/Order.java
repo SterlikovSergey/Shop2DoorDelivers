@@ -10,7 +10,6 @@ import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Entity
 @Table(name = "orders")
@@ -31,8 +30,9 @@ public class Order {
     @DateTimeFormat(pattern = "HH:mm:ss")
     private LocalTime deliveryTime;
 
-    @Enumerated(value = EnumType.STRING)
-    private OrderStatus orderStatus;
+    @Enumerated(EnumType.STRING)
+    private OrderStatus status;
+
 
     @OneToMany
     private List<Product> products = new ArrayList<>();
@@ -50,8 +50,8 @@ public class Order {
 
 
 
-    public String getUsername() {
-        return this.user != null ? this.user.getUsername() : null;
+/*    public String getUsername() {
+        return this.user.getUsername() != null ? this.user.getUsername() : null;
     }
 
     public List<Product> getProducts() {
@@ -62,9 +62,9 @@ public class Order {
         return this.createdOrder != null ? this.createdOrder.toString() : null;
     }
 
-    public String getOrderStatus() {
-        return this.orderStatus != null ? this.orderStatus.name() : null;
-    }
+    public String getStatus() {
+        return this.status != null ? this.status.name() : null;
+    }*/
 
 
 }

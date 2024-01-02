@@ -24,7 +24,9 @@ public class Product {
     private Long id;
 
     private String name;
+
     private Short amount;
+
     private BigDecimal price;
 
     @ManyToOne

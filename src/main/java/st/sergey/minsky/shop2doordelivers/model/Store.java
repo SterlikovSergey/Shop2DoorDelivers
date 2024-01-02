@@ -3,6 +3,7 @@ package st.sergey.minsky.shop2doordelivers.model;
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import lombok.*;
+import st.sergey.minsky.shop2doordelivers.model.enums.StoreStatus;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -22,7 +23,16 @@ public class Store {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
 
     private Long id;
+
+    @Column(unique = true)
     private String name;
+
+    @Enumerated(value = EnumType.STRING)
+    private StoreStatus status;
+
+    public String getStatus() {
+        return this.status != null ? this.status.toString() : null;
+    }
 
 /*    @ManyToMany
 *//*    @JoinTable(

@@ -1,5 +1,6 @@
 package st.sergey.minsky.shop2doordelivers.service;
 
+import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,14 +27,15 @@ import java.util.zip.Deflater;
 import java.util.zip.Inflater;
 
 @Service
+@RequiredArgsConstructor
 public class ImageUploadService {
     public static final Logger LOG = LoggerFactory.getLogger(ImageUploadService.class);
-    @Autowired
-    private ImageRepository imageRepository;
-    @Autowired
-    private UserRepository userRepository;
-    @Autowired
-    private ProductRepository productRepository;
+
+    private final ImageRepository imageRepository;
+
+    private final UserRepository userRepository;
+
+    private final ProductRepository productRepository;
 
 
 
