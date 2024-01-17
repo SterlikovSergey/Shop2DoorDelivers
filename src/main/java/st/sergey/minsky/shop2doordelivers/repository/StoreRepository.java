@@ -16,4 +16,8 @@ public interface StoreRepository extends JpaRepository<Store,Long> {
     List<StoreView> findAllByStatus(StoreStatus status);
 
     Optional<Store> findByName(String name);
+
+/*    List<Product> findAllByProducts();*/
+
+    boolean existsByName(String name);
 }

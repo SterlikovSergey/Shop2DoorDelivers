@@ -9,11 +9,9 @@ import st.sergey.minsky.shop2doordelivers.service.ProductService;
 @Component
 @RequiredArgsConstructor
 public class ProductOrderMapper {
-    private final ProductService productService;
     public Product productOrderDtoToProduct(ProductOrderDto dto){
         Product product = new Product();
         product.setId(dto.getId());
-        product.setAmount(dto.getAmount());
         return product;
     }
 

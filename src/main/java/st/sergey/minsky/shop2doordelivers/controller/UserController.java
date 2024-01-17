@@ -4,12 +4,14 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -42,6 +44,8 @@ import java.util.Optional;
 @Tag(name = "User resource", description = "description from user resource")
 public class UserController {
 
+    private final JavaMailSender javaMailSender;
+
     private final UserService userService;
     private final UserMapper userMapper;
     private final JWTTokenProvider tokenProvider;
@@ -49,33 +53,17 @@ public class UserController {
     private final AuthenticationManager authenticationManager;
 
     @GetMapping("/all")
-    public Page<User> getAllCandidates(@RequestParam(defaultValue = "0") int page,
-                                       @RequestParam(defaultValue = "10") int size,
-                                       @RequestParam(required = false) String sortBy) {
+    public Page<User> getAllUsers(@RequestParam(defaultValue = "0") int page,
+                                  @RequestParam(defaultValue = "10") int size,
+                                  @RequestParam(required = false) String sortBy) {
         Pageable pageable = PageRequest.of(page, size, Sort.by(sortBy));
         return userService.getAllUsers(pageable);
     }
 
-    @GetMapping("/{name}")
-    @Operation(summary = "find by name", description = "Find User by name")
-    @ApiResponse(responseCode = "404", description = "User not found")
-    public ResponseEntity<User> getUserByName(@PathVariable String name) {
-        User byName = userService.getUserByName(name);
-        return ResponseEntity.ok(byName);
-    }
-
-
-/*    @GetMapping("/getAllByUsername/{username}/{page}")
-    @Operation(summary = "create list users", description = "all users by username")
-    public ResponseEntity<List<User>> getAllCandidatesByUsername(@PathVariable String username) {
-        List<User> candidatesByName = userService.getUserByName(username);
-        return ResponseEntity.ok(candidatesByName);
-    }*/
-
     @PostMapping("/signup")
     public ResponseEntity<Object> registration(@Valid @RequestBody UserDto dto, BindingResult result) {
         ResponseEntity<Object> errors = responseErrorValidator.mapValidationService(result);
-        if(!ObjectUtils.isEmpty(errors)) {
+        if (!ObjectUtils.isEmpty(errors)) {
             return errors;
         }
         return new ResponseEntity<>(userService.create(userMapper.createUserDtoToUser(dto)),
@@ -83,33 +71,22 @@ public class UserController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<Object> login(@Valid @RequestBody AuthRequestDto dto,
-                                        BindingResult result) {
+    public ResponseEntity<Object> login(@Valid @RequestBody AuthRequestDto dto, BindingResult result) {
         ResponseEntity<Object> errors = responseErrorValidator.mapValidationService(result);
-        if(ObjectUtils.isEmpty(errors)){
+        if (!ObjectUtils.isEmpty(errors)) {
             return errors;
         }
-
         UserDetails userDetails = userService.loadUserByUsername(dto.getUsername());
         BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
-
         if (encoder.matches(dto.getPassword(), userDetails.getPassword())) {
-            String token = tokenProvider.generateToken(userDetails.getUsername(), userDetails.getAuthorities());
+            Authentication auth = new UsernamePasswordAuthenticationToken(userDetails,
+                    null, userDetails.getAuthorities());
+            SecurityContextHolder.getContext().setAuthentication(auth);
+            String token = tokenProvider.generateToken(userDetails.getUsername(),
+                    userDetails.getAuthorities());
             return ResponseEntity.ok(token);
         }
         return ResponseEntity.badRequest().build();
     }
 
-/*    @PostMapping("/delete/{id}")
-    public ResponseEntity<MessageResponse> setUserStatusDelete(@PathVariable ("id") Long id){
-        userService.setDeleteStatusById(id);
-        return ResponseEntity.ok(new MessageResponse("User " + id + "deleting"));
-    }*/
-
-
-
-    private Optional<User> getOptionalUser(Long id) {
-        return userService.findById(id);
-    }
 }
-

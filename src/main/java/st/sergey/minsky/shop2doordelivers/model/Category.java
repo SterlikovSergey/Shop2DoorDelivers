@@ -1,9 +1,14 @@
 package st.sergey.minsky.shop2doordelivers.model;
 
 
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import lombok.*;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Builder
@@ -12,8 +17,9 @@ import javax.persistence.*;
 @Data
 @Getter
 @Setter
-public class Category {
+@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
 
+public class Category {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -21,5 +27,7 @@ public class Category {
     @Column(unique = true)
     private String name;
 
-
+    @JsonIgnore
+    @OneToMany(mappedBy = "category")
+    List<Product> products = new ArrayList<>();
 }

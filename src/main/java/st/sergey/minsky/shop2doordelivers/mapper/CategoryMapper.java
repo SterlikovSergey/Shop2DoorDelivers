@@ -8,15 +8,8 @@ import st.sergey.minsky.shop2doordelivers.model.Category;
 public class CategoryMapper {
     public Category categoryDtoToCategory(CategoryDto dto) {
         Category category = new Category();
-        String name = capitalizeFirstLetter(dto.getName());
+        String name = dto.getName();
         category.setName(name);
         return category;
-    }
-    public String capitalizeFirstLetter(String word) {
-        if (word == null || word.isEmpty()) {
-            return "";
-        }
-        char firstLetter = Character.toUpperCase(word.charAt(0));
-        return firstLetter + word.substring(1);
     }
 }

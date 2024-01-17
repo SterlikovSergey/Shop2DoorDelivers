@@ -7,8 +7,8 @@ import st.sergey.minsky.shop2doordelivers.model.Store;
 @Component
 public class StoreMapper {
     public Store storeDtoToStore(StoreDto dto){
-        Store store = new Store();
-        store.setName(dto.getName());
-        return store;
+        return Store.builder()
+                .name(dto.getName())
+                .build();
     }
 }

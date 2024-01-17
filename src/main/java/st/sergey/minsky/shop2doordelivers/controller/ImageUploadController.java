@@ -1,6 +1,7 @@
 package st.sergey.minsky.shop2doordelivers.controller;
 
 
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -16,14 +17,13 @@ import java.security.Principal;
 @RestController
 @RequestMapping("/image")
 @CrossOrigin
+@RequiredArgsConstructor
 public class ImageUploadController {
-    @Autowired
-    private ImageUploadService imageUploadService;
+    private final ImageUploadService imageUploadService;
 
     @PostMapping("/upload")
     public ResponseEntity<MessageResponse> uploadImageToUser(@RequestParam("file") MultipartFile file,
                                                              Principal principal) throws IOException {
-
         imageUploadService.uploadImageToUser(file, principal);
         return ResponseEntity.ok(new MessageResponse("Image Uploaded Successfully"));
     }

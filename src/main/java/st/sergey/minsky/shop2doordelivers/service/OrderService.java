@@ -21,31 +21,34 @@ import st.sergey.minsky.shop2doordelivers.repository.view.OrderView;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
 @RequiredArgsConstructor
 @Builder
 public class OrderService {
-
     public static final Logger LOG = LoggerFactory.getLogger(OrderService.class);
-
     private final OrderRepository orderRepository;
-
     private final UserService userService;
-
     private final ProductService productService;
-
     private final CourierRepository courierRepository;
 
-    public Order createOrder(Long userId) {
+    public Order createOrder(Long userId, Product product) {
         User user = userService.findById(userId).orElseThrow(() -> new UserNotFoundException("User " +
                 "not found with id " + userId));
+
+        List<Product> products = new ArrayList<>();
+        Product addProduct = productService.getProduct(product.getId());
+        /*addProduct.setAmount(changeQuantityProduct(product));*/
+        products.add(addProduct);
+
         LocalDateTime currentDateTime = LocalDateTime.now();
         Order newOrder = Order.builder()
                 .createdOrder(currentDateTime)
                 .status(OrderStatus.CREATED)
                 .user(user)
+                /*.products(products)*/
                 .build();
         return orderRepository.save(newOrder);
     }
@@ -55,9 +58,9 @@ public class OrderService {
                 .orElseThrow(()-> new OrderNotFoundException("Order not found"));
 
         Product balanceProduct =  productService.getProduct(product.getId());
-        Short amountBalanceProduct = balanceProduct.getAmount();
+        /*Short amountBalanceProduct = balanceProduct.getAmount();
         Short amountOrderProduct = product.getAmount();
-        balanceProduct.setAmount((short) (amountBalanceProduct - amountOrderProduct));
+        balanceProduct.setAmount((short) (amountBalanceProduct - amountOrderProduct));*/
         productService.update(balanceProduct);
 
         List<Product> existsProducts = order.getProducts();
@@ -100,10 +103,10 @@ public class OrderService {
 
         for (Product product : products) {
             BigDecimal price = product.getPrice();
-            Short amount = product.getAmount();
+            /*Short amount = product.getAmount();*/
 
-            BigDecimal productTotalCost = price.multiply(BigDecimal.valueOf(amount));
-            totalCost = totalCost.add(productTotalCost);
+            /*BigDecimal productTotalCost = price.multiply(BigDecimal.valueOf(amount));*/
+            /*totalCost = totalCost.add(productTotalCost);*/
         }
 
         return totalCost;
@@ -128,4 +131,13 @@ public class OrderService {
     public void deleteOrderById(Long id) {
         orderRepository.deleteById(id);
     }
+
+
+    /*private Short changeQuantityProduct (Product product){
+        Product balanceProduct = productService.getProduct(product.getId());
+        balanceProduct.setAmount((short) (balanceProduct.getAmount() - product.getAmount()));
+        productService.update(balanceProduct);
+        return product.getAmount();
+
+    }*/
 }

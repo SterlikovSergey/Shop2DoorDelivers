@@ -1,23 +1,19 @@
 package st.sergey.minsky.shop2doordelivers.controller;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.util.ObjectUtils;
 import org.springframework.validation.BindingResult;
-import org.springframework.validation.ObjectError;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import st.sergey.minsky.shop2doordelivers.dto.CourierDto;
 import st.sergey.minsky.shop2doordelivers.mapper.CourierMapper;
-import st.sergey.minsky.shop2doordelivers.model.Courier;
-import st.sergey.minsky.shop2doordelivers.repository.view.CourierView;
 import st.sergey.minsky.shop2doordelivers.service.CourierService;
 import st.sergey.minsky.shop2doordelivers.validations.ResponseErrorValidator;
 
 import javax.validation.Valid;
+import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
@@ -29,6 +25,11 @@ public class CourierController {
     private final CourierMapper courierMapper;
     private final ResponseErrorValidator responseErrorValidator;
 
+    @GetMapping
+    public ResponseEntity<List<Object>> getAllCouriers(){
+        return new ResponseEntity<>(courierService.findAllCouriers(),HttpStatus.OK);
+    }
+
     @PostMapping()
     public ResponseEntity<Object> create(@Valid @RequestBody CourierDto dto,
                                               BindingResult result){
@@ -36,7 +37,7 @@ public class CourierController {
         if(ObjectUtils.isEmpty(errors)){
             return errors;
         }
-        Courier courier = courierService.create(courierMapper.courierDtoToCoutier(dto));
-        return ResponseEntity.ok(courier);
+        return new ResponseEntity<>(courierService.create(courierMapper.courierDtoToCourier(dto)),
+                HttpStatus.CREATED);
     }
 }

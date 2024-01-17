@@ -45,7 +45,7 @@ public class ResponseErrorValidator {
 
             return ResponseEntity.badRequest().body(errors.toString());
         } else {
-            return ResponseEntity.ok("Validation passed");
+            return /*ResponseEntity.ok("Validation passed")*/ null;
         }
     }
 }

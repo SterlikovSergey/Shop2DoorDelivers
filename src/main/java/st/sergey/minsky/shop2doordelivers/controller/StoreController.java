@@ -1,6 +1,7 @@
 package st.sergey.minsky.shop2doordelivers.controller;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.util.ObjectUtils;
 import org.springframework.validation.BindingResult;
@@ -47,17 +48,14 @@ public class StoreController {
     }
 
     @PostMapping
-    public ResponseEntity<Object> create(@Valid @RequestBody StoreDto store,
-                                                     BindingResult result) {
+    public ResponseEntity<Object> create(@Valid @RequestBody StoreDto store, BindingResult result) {
         ResponseEntity<Object> errors = responseErrorValidator.mapValidationService(result);
         if(result.hasErrors()){
             return errors;
         }
-        Store savedStore = storeService.create(storedMapper.storeDtoToStore(store));
-        return ResponseEntity.ok(savedStore);
+        return new ResponseEntity<>(storeService.create(storedMapper.storeDtoToStore(store)),
+                HttpStatus.CREATED);
     }
-
-
 
     @DeleteMapping("/delete/{id}")
     public ResponseEntity<Store> deleteStoreById(@PathVariable ("id") Long id) {

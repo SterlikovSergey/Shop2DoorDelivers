@@ -3,28 +3,30 @@ package st.sergey.minsky.shop2doordelivers.model;
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import lombok.*;
-import st.sergey.minsky.shop2doordelivers.model.enums.PaymentStatus;
 
 import javax.persistence.*;
-import java.math.BigDecimal;
 
 @Entity
-@Builder
-@AllArgsConstructor
-@NoArgsConstructor
 @Data
 @Getter
 @Setter
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
 @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
 
-public class Payment {
+public class Stock {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private BigDecimal amount;
-    private PaymentStatus status;
+    @ManyToOne
+    @JoinColumn(name = "store_id")
+    private Store store;
 
-    @OneToOne
-    private Order order;
+    @ManyToOne
+    @JoinColumn(name = "product_id")
+    private Product product;
+
+    private Long quantity;
 }

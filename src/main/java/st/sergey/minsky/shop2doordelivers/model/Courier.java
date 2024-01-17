@@ -1,5 +1,8 @@
 package st.sergey.minsky.shop2doordelivers.model;
 
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import lombok.*;
 import st.sergey.minsky.shop2doordelivers.model.enums.CourierStatus;
 
@@ -14,8 +17,9 @@ import java.util.List;
 @Data
 @Getter
 @Setter
-public class Courier {
+@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
 
+public class Courier {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -25,15 +29,9 @@ public class Courier {
     @Enumerated(EnumType.STRING)
     private CourierStatus status;
 
-
-    @OneToMany
+    @OneToMany(mappedBy = "courier")
     private List<Order> orders = new ArrayList<>();
 
-    @OneToMany
-    List<Comment> comments = new ArrayList<>();
-
-    public String getStatus() {
-        return this.status != null ? this.status.name() : null;
-    }
-
+    @OneToMany(mappedBy = "courier")
+    private List<Comment> comments = new ArrayList<>();
 }

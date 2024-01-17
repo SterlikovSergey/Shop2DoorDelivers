@@ -9,13 +9,11 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import st.sergey.minsky.shop2doordelivers.dto.CategoryDto;
 import st.sergey.minsky.shop2doordelivers.mapper.CategoryMapper;
-import st.sergey.minsky.shop2doordelivers.model.Category;
 import st.sergey.minsky.shop2doordelivers.repository.view.CategoryView;
 import st.sergey.minsky.shop2doordelivers.service.CategoryService;
 import st.sergey.minsky.shop2doordelivers.validations.ResponseErrorValidator;
 
 import javax.validation.Valid;
-import java.util.List;
 import java.util.Set;
 
 @RestController
@@ -37,11 +35,11 @@ public class CategoryController {
     @PostMapping
     public ResponseEntity<Object> create(@Valid @RequestBody CategoryDto dto, BindingResult result) {
         ResponseEntity<Object> errors = responseErrorValidator.mapValidationService(result);
-        if(result.hasErrors()) {
+        if(!ObjectUtils.isEmpty(errors)) {
             return errors;
         }
-        Category savedCategory = categoryService.create(categoryMapper.categoryDtoToCategory(dto));
-        return ResponseEntity.ok(savedCategory);
+        return new ResponseEntity<>(categoryService.create(categoryMapper.categoryDtoToCategory(dto)),
+        HttpStatus.CREATED);
     }
 
     @DeleteMapping("/{id}")

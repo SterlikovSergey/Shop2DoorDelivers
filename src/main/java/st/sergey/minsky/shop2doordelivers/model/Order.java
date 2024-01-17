@@ -1,5 +1,7 @@
 package st.sergey.minsky.shop2doordelivers.model;
 
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import lombok.*;
 import org.springframework.format.annotation.DateTimeFormat;
 import st.sergey.minsky.shop2doordelivers.model.enums.OrderStatus;
@@ -19,6 +21,8 @@ import java.util.List;
 @Data
 @Getter
 @Setter
+@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
+
 public class Order {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -33,7 +37,6 @@ public class Order {
     @Enumerated(EnumType.STRING)
     private OrderStatus status;
 
-
     @OneToMany
     private List<Product> products = new ArrayList<>();
 
@@ -41,30 +44,12 @@ public class Order {
     private Payment payment;
 
     @ManyToOne
+    @JoinColumn(name = "courier_id")
     private Courier courier;
 
     @ManyToOne
+    @JoinColumn(name = "user_id")
     private User user;
 
     private BigDecimal totalCost;
-
-
-
-/*    public String getUsername() {
-        return this.user.getUsername() != null ? this.user.getUsername() : null;
-    }
-
-    public List<Product> getProducts() {
-        return this.products != null ? new ArrayList<>(this.products) : null;
-    }
-
-    public String getDate() {
-        return this.createdOrder != null ? this.createdOrder.toString() : null;
-    }
-
-    public String getStatus() {
-        return this.status != null ? this.status.name() : null;
-    }*/
-
-
 }

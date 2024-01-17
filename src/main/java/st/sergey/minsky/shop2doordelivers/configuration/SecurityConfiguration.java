@@ -24,7 +24,9 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     private static final String CREATE_CATEGORY_ENDPOINT = "/category";
     private static final String CREATE_PRODUCT_ENDPOINT = "/product";
     private static final String CREATE_STORE_ENDPOINT = "/store";
+    private static final String CREATE_STOCK_ENDPOINT = "/stock";
     private static final String CREATE_ORDER_ENDPOINT = "/order";
+    private static final String CREATE_COURIER_ENDPOINT = "/courier";
 
     private static final String[] PUBLIC_URLS = {
             "/**",
@@ -33,6 +35,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
             "/product/**",
             "/category/**",
             "/order/**",
+            "/courier/**",
             "/swagger-ui/index.html",
             "/swagger-resources/**",
             "configuration/**",
@@ -62,17 +65,19 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
                 .authorizeRequests()
-                .antMatchers(HttpMethod.POST, CREATE_USER_ENDPOINT,
+                .antMatchers(HttpMethod.POST, CREATE_USER_ENDPOINT, CREATE_COURIER_ENDPOINT,
                         LOGIN_ENDPOINT, CREATE_DIRECTION_ENDPOINT,CREATE_CATEGORY_ENDPOINT,CREATE_PRODUCT_ENDPOINT,
-                        CREATE_STORE_ENDPOINT,CREATE_ORDER_ENDPOINT).permitAll()
+                        CREATE_STORE_ENDPOINT,CREATE_ORDER_ENDPOINT,CREATE_STOCK_ENDPOINT).permitAll()
                 .antMatchers(ADMIN_ENDPOINT).hasAuthority("ADMIN")
                 .antMatchers(HttpMethod.GET, PUBLIC_URLS).permitAll()
                 .antMatchers("/db/**").permitAll()
                 .antMatchers("/user/**").permitAll()
                 .antMatchers("/store/**").permitAll()
                 .antMatchers("/order/**").permitAll()
+                .antMatchers("/stock/**").permitAll()
                 .antMatchers("/product/**").permitAll()
                 .antMatchers("/category/**").permitAll()
+                .antMatchers("/courier/**").permitAll()
                 .antMatchers("/direction/**").permitAll()
                 .antMatchers("/v3/api-docs/**").permitAll()
                 .antMatchers("/swagger-ui/**").permitAll()

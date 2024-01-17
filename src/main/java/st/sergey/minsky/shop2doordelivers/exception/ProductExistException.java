@@ -4,24 +4,24 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
 @ResponseStatus(HttpStatus.BAD_REQUEST)
-public class CategoryExistException extends RuntimeException {
-    public CategoryExistException() {
+public class ProductExistException extends RuntimeException {
+    public ProductExistException() {
         super();
     }
 
-    public CategoryExistException(String message) {
+    public ProductExistException(String message) {
         super(message);
     }
 
-    public CategoryExistException(String message, Throwable cause) {
+    public ProductExistException(String message, Throwable cause) {
         super(message, cause);
     }
 
-    public CategoryExistException(Throwable cause) {
+    public ProductExistException(Throwable cause) {
         super(cause);
     }
 
-    protected CategoryExistException(String message, Throwable cause, boolean enableSuppression, boolean writableStackTrace) {
+    protected ProductExistException(String message, Throwable cause, boolean enableSuppression, boolean writableStackTrace) {
         super(message, cause, enableSuppression, writableStackTrace);
     }
 }

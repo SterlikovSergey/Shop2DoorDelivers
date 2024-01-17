@@ -4,10 +4,14 @@ import lombok.Builder;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
+import st.sergey.minsky.shop2doordelivers.exception.ProductExistException;
 import st.sergey.minsky.shop2doordelivers.exception.StoreNotFoundException;
+import st.sergey.minsky.shop2doordelivers.model.Category;
 import st.sergey.minsky.shop2doordelivers.model.Product;
 import st.sergey.minsky.shop2doordelivers.repository.ProductRepository;
+import st.sergey.minsky.shop2doordelivers.utils.StringUtil;
 
 import java.util.List;
 
@@ -15,35 +19,24 @@ import java.util.List;
 @Service
 @RequiredArgsConstructor
 public class ProductService {
-
     public static final Logger LOG = LoggerFactory.getLogger(ProductService.class);
-
+    private final CategoryService categoryService;
     private final ProductRepository productRepository;
     private final StoreService storeService;
+    private final StringUtil stringUtil;
 
-
-    public Product create(Product product) {
-        LOG.info("Saving product " + product.getName());
-        return productRepository.save(product);
+    public Object create(Product product) {
+        String capitalizedProductName = stringUtil.capitalizeFirstLetter(product.getName());
+        Category categoryProduct = categoryService.getCategoryById(product.getCategory().getId());
+        product.setCategory(categoryProduct);
+        return saveProduct(product, capitalizedProductName);
     }
 
-    public Product setAmountStore(Product product) {
-        Product seveProduct = getProduct(product.getId());
-        seveProduct.setAmount(product.getAmount());
-        seveProduct.setPrice(product.getPrice());
-        seveProduct.setStore(product.getStore());
-        return productRepository.save(seveProduct);
-    }
-
-    public List<Product> readAll() {
-        return productRepository.findAll();
-    }
-
-    public List<Product> readByCategoryId(Long id){
+    public List<Product> readByCategoryId(Long id) {
         return productRepository.findByCategoryId(id);
     }
 
-    public Product update(Product product) {
+    public Object update(Product product) {
         return productRepository.save(product);
     }
 
@@ -51,10 +44,24 @@ public class ProductService {
         productRepository.deleteById(id);
     }
 
-
-
     public Product getProduct(Long productId) {
         return productRepository.findById(productId)
                 .orElseThrow(() -> new StoreNotFoundException("Store with id " + productId + " not found"));
+    }
+
+    public boolean isProductNameUnique(String name) {
+        return !productRepository.existsByName(name);
+    }
+
+    private Object saveProduct(Product product, String capitalizedProductName) {
+        try {
+            product.setName(capitalizedProductName);
+            LOG.info("Saving product {} ", product.getName());
+            return productRepository.save(product);
+        } catch (DataIntegrityViolationException e) {
+            LOG.error("CATCH Error during registration. {}", e.getMessage());
+            throw new ProductExistException("The product  with name " + product.getName() +
+                    " already exists. Please check credentials");
+        }
     }
 }

@@ -1,5 +1,7 @@
 package st.sergey.minsky.shop2doordelivers.model;
 
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import lombok.*;
 import org.springframework.format.annotation.DateTimeFormat;
 
@@ -13,8 +15,9 @@ import java.time.LocalDateTime;
 @Data
 @Getter
 @Setter
-public class Comment {
+@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
 
+public class Comment {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -27,6 +30,6 @@ public class Comment {
     private LocalDateTime createdDate;
 
     @ManyToOne
+    @JoinColumn(name = "courier_id")
     private Courier courier;
-
 }

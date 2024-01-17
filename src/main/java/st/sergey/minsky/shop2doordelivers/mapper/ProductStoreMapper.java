@@ -14,10 +14,10 @@ public class ProductStoreMapper {
 
     public Product productStoreDtoToProduct(ProductStoreDto dto) {
         Product product = new Product();
-        product.setAmount(dto.getAmount());
+        /*product.setAmount(dto.getAmount());*/
         product.setPrice(dto.getPrice());
         Store store = storeService.getStoreById(dto.getStoreId());
-        product.setStore(store);
+        /*product.setStore(store);*/
         return product;
     }
 }

@@ -1,6 +1,7 @@
 package st.sergey.minsky.shop2doordelivers.model;
 
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import lombok.*;
 
@@ -17,15 +18,14 @@ import java.util.List;
 @Getter
 @Setter
 @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
-public class Product {
 
+public class Product {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(unique = true)
     private String name;
-
-    private Short amount;
 
     private BigDecimal price;
 
@@ -33,20 +33,7 @@ public class Product {
     @JoinColumn(name = "category_id")
     private Category category;
 
-    @ManyToOne
-    @JoinColumn(name = "store_id")
-    private Store store;
-
-/*    @ManyToMany(mappedBy = "products")
-    private List<Store> stores = new ArrayList<>();*/
-
-/*    @ManyToOne
-    @JoinColumn(name = "order_id")
-    private Order order;*/
-
-    public String getCategoryName(){
-        return this.category != null ? this.category.getName() : null;
-    }
-
-
+    @JsonIgnore
+    @OneToMany(mappedBy = "product")
+    List<Stock> stocks = new ArrayList<>();
 }
