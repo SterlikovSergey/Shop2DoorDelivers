@@ -7,9 +7,9 @@ import st.sergey.minsky.shop2doordelivers.model.Category;
 @Component
 public class CategoryMapper {
     public Category categoryDtoToCategory(CategoryDto dto) {
-        Category category = new Category();
-        String name = dto.getName();
-        category.setName(name);
-        return category;
+        return Category
+                .builder()
+                .name(dto.getName())
+                .build();
     }
 }

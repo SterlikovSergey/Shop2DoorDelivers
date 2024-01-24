@@ -51,6 +51,9 @@ public class StockService {
     public List<ProductStockView> findAllProductStocksFromAllStoresWithPositiveQuantity() {
         return stockRepository.findAllProductStocksFromAllStores();
     }
+    public Product findProductWithStockByMinAmount(Long productId){
+        return stockRepository.findProductWithMinPriceInAllStores(productId);
+    }
 }
 
 

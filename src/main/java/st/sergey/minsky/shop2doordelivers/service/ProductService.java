@@ -7,6 +7,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 import st.sergey.minsky.shop2doordelivers.exception.ProductExistException;
+import st.sergey.minsky.shop2doordelivers.exception.StoreExistException;
 import st.sergey.minsky.shop2doordelivers.exception.StoreNotFoundException;
 import st.sergey.minsky.shop2doordelivers.model.Category;
 import st.sergey.minsky.shop2doordelivers.model.Product;
@@ -28,8 +29,13 @@ public class ProductService {
     public Object create(Product product) {
         String capitalizedProductName = stringUtil.capitalizeFirstLetter(product.getName());
         Category categoryProduct = categoryService.getCategoryById(product.getCategory().getId());
-        product.setCategory(categoryProduct);
-        return saveProduct(product, capitalizedProductName);
+        if(isProductNameUnique(capitalizedProductName)){
+            product.setCategory(categoryProduct);
+            return saveProduct(product, capitalizedProductName);
+        }LOG.error("The product {} already exist. Please check credentials", capitalizedProductName);
+        throw new StoreExistException("The product "
+                + product.getName() + " already exist. Please check credentials");
+
     }
 
     public List<Product> readByCategoryId(Long id) {

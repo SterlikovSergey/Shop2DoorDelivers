@@ -7,6 +7,7 @@ import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 import st.sergey.minsky.shop2doordelivers.exception.CategoryExistException;
 import st.sergey.minsky.shop2doordelivers.exception.CategoryNotFoundException;
+import st.sergey.minsky.shop2doordelivers.exception.StoreExistException;
 import st.sergey.minsky.shop2doordelivers.model.Category;
 import st.sergey.minsky.shop2doordelivers.repository.CategoryRepository;
 import st.sergey.minsky.shop2doordelivers.repository.view.CategoryView;
@@ -23,7 +24,13 @@ public class CategoryService {
 
     public Object create(Category category) {
         String capitalizedCategoryName = stringUtil.capitalizeFirstLetter(category.getName());
-        return saveCategory(category, capitalizedCategoryName);
+        if(isCategoryNameUnique(capitalizedCategoryName)){
+            return saveCategory(category, capitalizedCategoryName);
+        }else {
+            LOG.error("The category {} already exist. Please check credentials", capitalizedCategoryName);
+            throw new StoreExistException("The category "
+                    + category.getName() + " already exist. Please check credentials");
+        }
     }
 
     public Set<CategoryView> readAll() {
@@ -39,7 +46,7 @@ public class CategoryService {
         categoryRepository.deleteById(id);
     }
 
-    private Object saveCategory(Category category, String capitalizedCategoryName) {
+    public Object saveCategory(Category category, String capitalizedCategoryName){
         try {
             LOG.info("Saving category {}", capitalizedCategoryName);
             return categoryRepository.save(Category
@@ -51,6 +58,10 @@ public class CategoryService {
             throw new CategoryExistException("The category " + capitalizedCategoryName +
                     " already exist. Please check credentials");
         }
+    }
+
+    public boolean isCategoryNameUnique(String name){
+        return !categoryRepository.existsByName(name);
     }
 }
 

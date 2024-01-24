@@ -34,7 +34,7 @@ public class UserService implements UserDetailsService {
 
     public Object create(User user) {
         String capitalizedUsername = stringUtil.capitalizeFirstLetter(user.getUsername());
-        if (isUsernameUnique(capitalizedUsername) || isEmailUnique(user.getEmail())) {
+        if (isUsernameUnique(capitalizedUsername) && isEmailUnique(user.getEmail())) {
             return saveUser(user, capitalizedUsername);
         } else {
             LOG.error("ELSE Error during registration. Username with name {} already exists.", user.getUsername());
@@ -102,14 +102,4 @@ public class UserService implements UserDetailsService {
     private boolean isEmailUnique(String email) {
         return !userRepository.existsByEmail(email);
     }
-
-    /* public User setDeleteStatusById(Long id) {
-     *//*        Optional<User> user = userRepository.findUserByIdAndStatus(id,UserStatus.DELETED);
-        user.ifPresent(userRepository::delete);
-            LOG.info("Deleting user: " + id);
-            user.ifPresentOrElse(user1 -> user);
-
-        return userRepository.save(user);*//*
-    }*/
-
 }

@@ -8,9 +8,11 @@ import st.sergey.minsky.shop2doordelivers.model.Product;
 @Component
 public class ProductMapper {
     public Product productDtoToProduct(ProductDto dto) {
-        return Product.builder()
+        return Product
+                .builder()
                 .name(dto.getName())
-                .category(Category.builder()
+                .category(Category
+                        .builder()
                         .id(dto.getCategoryId())
                         .build())
                 .build();

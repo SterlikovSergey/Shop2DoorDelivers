@@ -12,11 +12,11 @@ import java.util.Collections;
 @Component
 @RequiredArgsConstructor
 public class OrderMapper {
-    public Order orderDtoToOrder(OrderDto dto) {
+/*    public Order orderDtoToOrder(OrderDto dto) {
         return Order.builder()
                 .products(Collections.singletonList(Product.builder()
                         .id(dto.getProduct().getId())
                         .build()))
                 .build();
-    }
+    }*/
 }
