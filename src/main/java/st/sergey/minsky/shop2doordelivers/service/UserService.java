@@ -1,6 +1,7 @@
 package st.sergey.minsky.shop2doordelivers.service;
 
 import lombok.AllArgsConstructor;
+import lombok.extern.log4j.Log4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.dao.DataIntegrityViolationException;
@@ -26,6 +27,7 @@ import java.util.Set;
 
 @AllArgsConstructor
 @Service
+
 public class UserService implements UserDetailsService {
     public static final Logger LOG = LoggerFactory.getLogger(UserService.class);
 
